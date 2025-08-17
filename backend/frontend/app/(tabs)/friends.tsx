@@ -40,7 +40,7 @@ export default function FriendsScreen() {
 
   const loadFriends = async () => {
     try {
-      const response = await apiService.get('/friends/list');
+      const response = await apiService.getFriendsList();
       setFriends(response.friends || []);
     } catch (error) {
       console.error('Error loading friends:', error);
@@ -61,9 +61,7 @@ export default function FriendsScreen() {
       let conversationId = friend.conversationId;
       
       if (!conversationId) {
-        const response = await apiService.post('/messages/conversation', {
-          friendId: friend.id,
-        });
+        const response = await apiService.createConversation(friend.id);
         conversationId = response.conversation.id;
       }
 
@@ -94,7 +92,7 @@ export default function FriendsScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              await apiService.delete(`/friends/remove/${friend.id}`);
+              await apiService.removeFriend(friend.id);
               setFriends(prev => prev.filter(f => f.id !== friend.id));
               Alert.alert('Success', 'Friend removed successfully');
             } catch (error) {
