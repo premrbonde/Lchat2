@@ -20,9 +20,12 @@ const User = require('./db/models/User');
 const app = express();
 const server = http.createServer(app);
 
+// CORS configuration
+const corsOrigins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:19006'];
+
 const io = socketIo(server, {
   cors: {
-    origin: "http://192.168.0.108:8081",
+    origin: corsOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -31,7 +34,7 @@ const io = socketIo(server, {
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: "http://192.168.0.108:8081",
+  origin: corsOrigins,
   credentials: true
 }));
 
@@ -59,11 +62,11 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/lchat', {
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/friends', friendRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/translate', translationRoutes);
+app.use('/auth', authRoutes);
+app.use('/users', userRoutes);
+app.use('/friends', friendRoutes);
+app.use('/messages', messageRoutes);
+app.use('/translate', translationRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

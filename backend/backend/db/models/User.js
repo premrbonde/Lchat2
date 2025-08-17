@@ -73,11 +73,7 @@ const userSchema = new mongoose.Schema({
       friendRequests: { type: Boolean, default: true },
       mentions: { type: Boolean, default: true }
     }
-  },
-  friends: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }]
+  }
 }, {
   timestamps: true
 });

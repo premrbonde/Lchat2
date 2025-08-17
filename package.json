@@ -1,0 +1,13 @@
+{
+  "name": "lchat-app-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd main/backend && npm run dev",
+    "frontend": "cd main/frontend && npx expo start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
