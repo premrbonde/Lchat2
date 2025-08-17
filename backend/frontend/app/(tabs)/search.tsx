@@ -67,7 +67,7 @@ export default function SearchScreen() {
   const performSearch = async (query: string) => {
     setLoading(true);
     try {
-      const response = await apiService.get(`/users/search?query=${encodeURIComponent(query)}&limit=20`);
+      const response = await apiService.searchUsers(query);
       const users = response.users || [];
       setSearchResults(users);
 
@@ -94,7 +94,7 @@ export default function SearchScreen() {
 
   const sendFriendRequest = async (userId: string) => {
     try {
-      await apiService.post('/friends/request', { toUserId: userId });
+      await apiService.sendFriendRequest(userId);
       
       // Update local status
       setFriendshipStatuses(prev => ({

@@ -1,9 +1,11 @@
+import Constants from "expo-constants";
+
 class ApiService {
   private baseURL: string;
   private authToken: string | null = null;
 
   constructor() {
-    this.baseURL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000';
+    this.baseURL = 'http://192.168.0.108:5000/api';
   }
 
   setAuthToken(token: string | null) {
@@ -88,6 +90,67 @@ class ApiService {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
     });
+  }
+
+  // Specific API methods
+  async searchUsers(query: string) {
+    return this.get(`/users/search?query=${encodeURIComponent(query)}`);
+  }
+
+  async sendFriendRequest(userId: string) {
+    return this.post('/friends/request', { toUserId: userId });
+  }
+
+  async getFriendsList() {
+    return this.get('/friends/list');
+  }
+
+  async createConversation(friendId: string) {
+    return this.post('/messages/conversation', { friendId });
+  }
+
+  async removeFriend(friendId: string) {
+    return this.delete(`/friends/remove/${friendId}`);
+  }
+
+  async uploadProfilePicture(userId: string, file: any) {
+    return this.uploadFile(`/users/profile/${userId}/avatar`, file);
+  }
+
+  async getMe() {
+    return this.get('/auth/me');
+  }
+
+  async getReceivedFriendRequests() {
+    return this.get('/friends/requests');
+  }
+
+  async getSentFriendRequests() {
+    return this.get('/friends/requests/sent');
+  }
+
+  async acceptFriendRequest(requestId: string) {
+    return this.post('/friends/accept', { requestId });
+  }
+
+  async rejectFriendRequest(requestId: string) {
+    return this.post('/friends/reject', { requestId });
+  }
+
+  async login(loginValue: string, password: string) {
+    return this.post('/auth/login', { login: loginValue, password });
+  }
+
+  async register(userData: any) {
+    return this.post('/auth/register', userData);
+  }
+
+  async logout() {
+    return this.post('/auth/logout');
+  }
+
+  async updateProfile(userId: string, updates: any) {
+    return this.put(`/users/profile/${userId}`, updates);
   }
 
   // File upload method

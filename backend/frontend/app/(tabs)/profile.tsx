@@ -53,14 +53,14 @@ export default function ProfileScreen() {
       const fileType = asset.uri.split('.').pop();
       const fileName = `profile-${Date.now()}.${fileType}`;
 
-      await apiService.uploadFile(`/users/profile/${user.id}/avatar`, {
+      await apiService.uploadProfilePicture(user.id, {
         uri: asset.uri,
         name: fileName,
         type: `image/${fileType}`,
       });
 
       // Refresh user data to get new profile picture URL
-      const response = await apiService.get('/auth/me');
+      const response = await apiService.getMe();
       updateProfile(response.user);
 
       Alert.alert('Success', 'Profile picture updated successfully!');

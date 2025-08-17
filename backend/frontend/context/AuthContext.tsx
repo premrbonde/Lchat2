@@ -59,7 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
       if (token) {
         apiService.setAuthToken(token);
-        const response = await apiService.get('/auth/me');
+        const response = await apiService.getMe();
         setUser(response.user);
       }
     } catch (error) {
@@ -72,10 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (loginValue: string, password: string) => {
     try {
-      const response = await apiService.post('/auth/login', {
-        login: loginValue,
-        password,
-      });
+      const response = await apiService.login(loginValue, password);
 
       const { token, user: userData } = response;
       
@@ -89,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (userData: RegisterData) => {
     try {
-      const response = await apiService.post('/auth/register', userData);
+      const response = await apiService.register(userData);
       
       const { token, user: newUser } = response;
       
@@ -103,7 +100,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await apiService.post('/auth/logout');
+      await apiService.logout();
     } catch (error) {
       console.error('Logout API call failed:', error);
     } finally {
@@ -117,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) return;
 
     try {
-      const response = await apiService.put(`/users/profile/${user.id}`, updates);
+      const response = await apiService.updateProfile(user.id, updates);
       setUser(response.user);
     } catch (error: any) {
       throw new Error(error.response?.data?.message || 'Profile update failed');
@@ -126,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshUser = async () => {
     try {
-      const response = await apiService.get('/auth/me');
+      const response = await apiService.getMe();
       setUser(response.user);
     } catch (error) {
       console.error('Refresh user failed:', error);
