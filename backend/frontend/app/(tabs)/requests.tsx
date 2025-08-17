@@ -54,8 +54,8 @@ export default function RequestsScreen() {
   const loadRequests = async () => {
     try {
       const [receivedResponse, sentResponse] = await Promise.all([
-        apiService.getReceivedFriendRequests(),
-        apiService.getSentFriendRequests(),
+        apiService.get('/friends/requests'),
+        apiService.get('/friends/requests/sent'),
       ]);
 
       setReceivedRequests(receivedResponse.requests || []);
@@ -77,7 +77,7 @@ export default function RequestsScreen() {
   const handleAcceptRequest = async (requestId: string) => {
     setProcessingRequest(requestId);
     try {
-      await apiService.acceptFriendRequest(requestId);
+      await apiService.post('/friends/accept', { requestId });
       
       // Remove from received requests
       setReceivedRequests(prev => prev.filter(req => req.id !== requestId));
@@ -103,7 +103,7 @@ export default function RequestsScreen() {
           onPress: async () => {
             setProcessingRequest(requestId);
             try {
-              await apiService.rejectFriendRequest(requestId);
+              await apiService.post('/friends/reject', { requestId });
               
               // Remove from received requests
               setReceivedRequests(prev => prev.filter(req => req.id !== requestId));

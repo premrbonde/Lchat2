@@ -4,9 +4,9 @@
   "description": "Complete cross-platform chat application with translation features",
   "main": "index.js",
   "scripts": {
-    "install:all": "npm install && cd backend/frontend && npm install && cd ../backend && npm install",
-    "dev": "concurrently \"cd backend/backend && npm run dev\" \"cd backend/frontend && npx expo start\"",
-    "seed": "cd backend/backend && node seed/seed.js",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "seed": "cd backend && node seed/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": ["chat", "translation", "react-native", "nodejs", "mongodb"],

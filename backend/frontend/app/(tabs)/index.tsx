@@ -56,7 +56,7 @@ export default function ChatsScreen() {
 
   const loadFriends = async () => {
     try {
-      const response = await apiService.getFriendsList();
+      const response = await apiService.get('/friends/list');
       setFriends(response.friends || []);
     } catch (error) {
       console.error('Error loading friends:', error);
@@ -108,7 +108,9 @@ export default function ChatsScreen() {
       
       if (!conversationId) {
         // Create new conversation
-        const response = await apiService.createConversation(friend.id);
+        const response = await apiService.post('/messages/conversation', {
+          friendId: friend.id,
+        });
         conversationId = response.conversation.id;
       }
 

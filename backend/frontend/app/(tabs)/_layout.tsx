@@ -1,25 +1,15 @@
-import { Tabs, useSegments, useRouter } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
+import { Redirect } from 'expo-router';
 import { MessageCircle, Users, Search, User, UserPlus } from 'lucide-react-native';
-import { useEffect } from 'react';
 
 export default function TabLayout() {
   const { isAuthenticated } = useAuth();
   const { colors } = useTheme();
-  const segments = useSegments();
-  const router = useRouter();
-
-  useEffect(() => {
-    const inAuthGroup = segments[0] === '(auth)';
-
-    if (segments.length > 0 && !isAuthenticated && !inAuthGroup) {
-      router.replace('/(auth)/login');
-    }
-  }, [isAuthenticated, segments, router]);
 
   if (!isAuthenticated) {
-    return null; // Or a loading spinner while we check auth
+    return <Redirect href="/(auth)/login" />;
   }
 
   return (
